@@ -6,6 +6,12 @@ from rest_framework import status
 from .serializers import RegistrationSerializer
 from django.contrib.auth import authenticate
 
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from rest_framework.permissions import IsAuthenticated
+from auth_app.models import User
+from .serializers import UserSerializer
+
 
 class RegistrationView(APIView):
     permission_classes = [AllowAny]
@@ -55,4 +61,39 @@ class LoginView(APIView):
             'email': user.email,
             'user_id': user.id
         }, status=status.HTTP_200_OK)
-    
+
+
+class EmailCheckView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        email = request.query_params.get('email')
+
+        if not email:
+            return Response(
+                {'detail': 'E-Mail-Adresse fehlt.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(
+                {'detail': 'Ungültige E-Mail-Adresse.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {'detail': 'E-Mail-Adresse nicht gefunden.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = UserSerializer(user)
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )

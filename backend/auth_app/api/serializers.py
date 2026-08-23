@@ -33,3 +33,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
             fullname=validated_data['fullname'],
             password=validated_data['password']
         )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'email',
+            'fullname'
+        ]
