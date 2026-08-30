@@ -3,7 +3,10 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
+    """Manage the creation of regular users and superusers."""
+
     def create_user(self, email, password, **extra_fields):
+        """Create and save a user with an email and hashed password."""
         if not email:
             raise ValueError('Eine E-Mail-Adresse ist erforderlich.')
 
@@ -20,6 +23,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password, **extra_fields):        # wird in der console über "python manage.py createsuperuser" aufgerufen
+        """Create and save a superuser with the required permissions."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -32,6 +36,8 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """Represent a custom user that uses an email address for authentication."""
+
     username = None
 
     fullname = models.CharField(max_length=255)
@@ -43,4 +49,5 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
+        """Return the user's email address as its string representation."""
         return self.email

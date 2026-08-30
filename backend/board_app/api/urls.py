@@ -1,3 +1,5 @@
+"""Define URL routes for board list and detail operations."""
+
 from django.urls import path
 
 from .views import BoardViewSet
@@ -16,14 +18,6 @@ board_detail = BoardViewSet.as_view({
 
 
 urlpatterns = [
-    path(
-        'boards/',
-        board_list,
-        name='board-list'
-    ),
-    path(
-        'boards/<int:pk>/',
-        board_detail,
-        name='board-detail'
-    ),
+    path('boards/', board_list, name='board-list'),
+    path('boards/<int:pk>/', board_detail, name='board-detail')
 ]

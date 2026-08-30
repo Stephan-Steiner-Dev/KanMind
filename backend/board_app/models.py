@@ -3,6 +3,8 @@ from django.db import models
 
 
 class Board(models.Model):
+    """Represent a board with an owner and assigned members."""
+
     title = models.CharField(max_length=255)
 
     owner = models.ForeignKey(
@@ -18,4 +20,5 @@ class Board(models.Model):
     )
 
     def __str__(self):
+        """Return the board title as its string representation."""
         return self.title

@@ -1,22 +1,24 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from .serializers import RegistrationSerializer
-from django.contrib.auth import authenticate
 
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from rest_framework.permissions import IsAuthenticated
+
 from auth_app.models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, RegistrationSerializer
 
 
 class RegistrationView(APIView):
+    """Handle user registration and return an authentication token."""
+    
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """Create a new user account from the provided registration data."""
         serializer = RegistrationSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -37,9 +39,12 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
+    """Handle user authentication and return an authentication token."""
+    
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """Authenticate a user using their email and password."""
         email = request.data.get('email')
         password = request.data.get('password')
         user = authenticate(
@@ -64,9 +69,12 @@ class LoginView(APIView):
 
 
 class EmailCheckView(APIView):
+    """Check whether a valid email address belongs to an existing user."""
+    
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """Validate the provided email and return the matching user."""
         email = request.query_params.get('email')
 
         if not email:

@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.db import models
 
-from board.models import Board
+from board_app.models import Board
 
 
 class Task(models.Model):
+    """Represent a task assigned to a board."""
+
     STATUS_CHOICES = [
         ('to-do', 'To Do'),
         ('in-progress', 'In Progress'),
@@ -63,10 +65,13 @@ class Task(models.Model):
     due_date = models.DateField()
 
     def __str__(self):
+        """Return the task title as its string representation."""
         return self.title
 
 
 class Comment(models.Model):
+    """Represent a comment associated with a task."""
+
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
@@ -84,4 +89,5 @@ class Comment(models.Model):
         ordering = ['created_at']
 
     def __str__(self):
+        """Return the comment ID as its string representation."""
         return f'Comment {self.id}'

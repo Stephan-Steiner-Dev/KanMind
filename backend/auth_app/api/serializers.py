@@ -1,11 +1,16 @@
 from rest_framework import serializers
+
 from ..models import User
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """Serialize and validate data for user registration."""
+
     repeated_password = serializers.CharField(write_only=True)
 
     class Meta:
+        """Define the model and fields used for registration."""
+
         model = User
         fields = [
             'fullname',
@@ -18,6 +23,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, data):
+        """Validate that both entered passwords match."""
         if data['password'] != data['repeated_password']:
             raise serializers.ValidationError({
                 'password': 'Die Passwörter stimmen nicht überein.'
@@ -26,6 +32,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        """Create and return a new user with a hashed password."""
         validated_data.pop('repeated_password')
 
         return User.objects.create_user(
@@ -36,7 +43,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """Serialize basic user information."""
+
     class Meta:
+        """Define the model and fields exposed by the serializer."""
+
         model = User
         fields = [
             'id',
