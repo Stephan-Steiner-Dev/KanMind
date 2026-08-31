@@ -17,12 +17,12 @@ class UserManager(BaseUserManager):
             **extra_fields
         )
 
-        user.set_password(password)               # sha356  (set_password)
+        user.set_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_superuser(self, email, password, **extra_fields):        # wird in der console über "python manage.py createsuperuser" aufgerufen
+    def create_superuser(self, email, password, **extra_fields):
         """Create and save a superuser with the required permissions."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
