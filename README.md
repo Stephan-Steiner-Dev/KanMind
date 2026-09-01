@@ -68,8 +68,8 @@ backend/
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd <repository-folder>/backend
+git clone <git@github.com:Stephan-Steiner-Dev/KanMind.git>
+cd KanMind/backend
 ```
 
 ### 2. Create a virtual environment
