@@ -13,7 +13,6 @@ db.sqlite3
 
 # Environment Variables / Secrets
 .env
-.env.*
 
 # IDE
 .vscode/

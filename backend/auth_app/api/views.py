@@ -30,7 +30,7 @@ class RegistrationView(APIView):
                 'fullname': user.fullname,
                 'email': user.email,
                 'user_id': user.id
-            }, status=status.HTTP_200_CREATED)
+            }, status=status.HTTP_201_CREATED)
 
         return Response(
             serializer.errors,
